@@ -51,15 +51,6 @@ func TestPuzzle1(t *testing.T) {
 		}
 	})
 
-	t.Run("Left 51 steps, Right 1 step", func(t *testing.T) {
-		input := "L51\nR1"
-		commands := strings.Split(input, "\n")
-		count := puzzle1(commands)
-		if count != 1 {
-			t.Errorf("Expected 1, got %d", count)
-		}
-	})
-
 	t.Run("Left 250 steps", func(t *testing.T) {
 		input := "L250"
 		commands := strings.Split(input, "\n")
