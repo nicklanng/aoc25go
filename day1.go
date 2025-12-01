@@ -34,23 +34,21 @@ func puzzle1(commands []string) int {
 		switch dir {
 		case 'L':
 			pos -= steps
+			for {
+				if pos < 0 {
+					pos += 100
+				} else {
+					break
+				}
+			}
 		case 'R':
 			pos += steps
-		}
-
-		for {
-			if pos < 0 {
-				pos += 100
-			} else {
-				break
-			}
-		}
-
-		for {
-			if pos > 99 {
-				pos -= 100
-			} else {
-				break
+			for {
+				if pos > 99 {
+					pos -= 100
+				} else {
+					break
+				}
 			}
 		}
 
