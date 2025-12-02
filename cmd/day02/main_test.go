@@ -60,13 +60,14 @@ func TestIsSequenceRepeatedOnce(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		if isSequenceRepeatedOnce(test.input) != test.expected {
-			t.Errorf("Expected %v, got %v", test.expected, isSequenceRepeatedOnce(test.input))
+		result := isSequenceRepeatedOnce(test.input)
+		if result != test.expected {
+			t.Errorf("Expected %v for %d, got %v", test.expected, test.input, result)
 		}
 	}
 }
 
-func TestIsSequnceRepeatedAtLeastOnce(t *testing.T) {
+func TestIsSequenceRepeatedAtLeastOnce(t *testing.T) {
 	tests := []struct {
 		input    int
 		expected bool
@@ -115,8 +116,9 @@ func TestIsSequnceRepeatedAtLeastOnce(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		if isSequnceRepeatedAtLeastOnce(test.input) != test.expected {
-			t.Errorf("Expected %v for %d, got %v", test.expected, test.input, isSequnceRepeatedAtLeastOnce(test.input))
+		result := isSequenceRepeatedAtLeastOnce(test.input)
+		if result != test.expected {
+			t.Errorf("Expected %v for %d, got %v", test.expected, test.input, result)
 		}
 	}
 }

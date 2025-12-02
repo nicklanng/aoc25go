@@ -55,7 +55,7 @@ func puzzle2(rangesStr []string) int {
 	}
 	for _, r := range ranges {
 		for i := r.Min; i <= r.Max; i++ {
-			if isSequnceRepeatedAtLeastOnce(i) {
+			if isSequenceRepeatedAtLeastOnce(i) {
 				sum += i
 			}
 		}
@@ -88,8 +88,8 @@ func isSequenceRepeatedOnce(r int) bool {
 	return str[:mid] == str[mid:]
 }
 
-// isSequnceRepeatedAtLeastOnce checks if a number is a repeated sequence at least once
-func isSequnceRepeatedAtLeastOnce(r int) bool {
+// isSequenceRepeatedAtLeastOnce checks if a number is a repeated sequence at least once
+func isSequenceRepeatedAtLeastOnce(r int) bool {
 	// parse int to string
 	str := fmt.Sprintf("%d", r)
 
