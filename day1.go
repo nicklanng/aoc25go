@@ -23,6 +23,8 @@ func main() {
 	fmt.Println("Puzzle 2: ", count)
 }
 
+var dirMods = [7]int{-1, 0, 0, 0, 0, 0, 1}
+
 func puzzle1(commands []string) int {
 	count := 0
 	pos := 50
@@ -31,25 +33,12 @@ func puzzle1(commands []string) int {
 		dir, stepsStr := command[0], command[1:]
 		steps, _ := strconv.Atoi(stepsStr)
 
-		switch dir {
-		case 'L':
-			pos -= steps
-			for {
-				if pos < 0 {
-					pos += 100
-				} else {
-					break
-				}
-			}
-		case 'R':
-			pos += steps
-			for {
-				if pos > 99 {
-					pos -= 100
-				} else {
-					break
-				}
-			}
+		delta := dirMods[dir-'L']
+		pos += delta * steps
+		pos %= 100
+
+		if pos < 0 {
+			pos += 100
 		}
 
 		if pos == 0 {

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"os"
 	"strings"
 	"testing"
 )
@@ -115,4 +116,28 @@ func TestPuzzle2(t *testing.T) {
 			t.Errorf("Expected 20, got %d", count)
 		}
 	})
+}
+
+func BenchmarkPuzzle1(b *testing.B) {
+	input, err := os.ReadFile("input/day1")
+	if err != nil {
+		b.Fatal(err)
+	}
+	commands := strings.Split(string(input), "\n")
+
+	for b.Loop() {
+		_ = puzzle1(commands)
+	}
+}
+
+func BenchmarkPuzzle2(b *testing.B) {
+	input, err := os.ReadFile("input/day1")
+	if err != nil {
+		b.Fatal(err)
+	}
+	commands := strings.Split(string(input), "\n")
+
+	for b.Loop() {
+		_ = puzzle2(commands)
+	}
 }
