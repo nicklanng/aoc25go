@@ -42,7 +42,7 @@ func (g Grid) ClearRoll(x, y int) {
 }
 
 func (g Grid) Neighbors(x, y int) []Point {
-	neighbors := []Point{}
+	neighbors := make([]Point, 0, 8)
 	for _, dx := range []int{-1, 0, 1} {
 		for _, dy := range []int{-1, 0, 1} {
 			if dx == 0 && dy == 0 {
