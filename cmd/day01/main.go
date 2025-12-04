@@ -16,11 +16,11 @@ func main() {
 
 	commands := strings.Split(string(input), "\n")
 
-	count := puzzle1(commands)
-	fmt.Println("Puzzle 1: ", count)
+	answer1 := puzzle1(commands)
+	fmt.Println("Puzzle 1: ", answer1)
 
-	count = puzzle2(commands)
-	fmt.Println("Puzzle 2: ", count)
+	answer2 := puzzle2(commands)
+	fmt.Println("Puzzle 2: ", answer2)
 }
 
 var dirMods = [7]int{-1, 0, 0, 0, 0, 0, 1}

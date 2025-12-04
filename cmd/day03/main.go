@@ -17,11 +17,11 @@ func main() {
 
 	selections := strings.Split(string(input), "\n")
 
-	count := puzzle1(selections)
-	fmt.Println("Puzzle 1: ", count)
+	answer1 := puzzle1(selections)
+	fmt.Println("Puzzle 1: ", answer1)
 
-	count = puzzle2(selections)
-	fmt.Println("Puzzle 2: ", count)
+	answer2 := puzzle2(selections)
+	fmt.Println("Puzzle 2: ", answer2)
 }
 
 func puzzle1(selections []string) int {

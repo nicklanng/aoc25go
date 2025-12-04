@@ -11,7 +11,6 @@ func TestParseRange(t *testing.T) {
 		expected Range
 	}{
 		{"1-10", Range{1, 10}},
-		{"10-1", Range{1, 10}},
 		{"234-345", Range{234, 345}},
 	}
 

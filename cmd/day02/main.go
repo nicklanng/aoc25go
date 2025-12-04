@@ -21,11 +21,11 @@ func main() {
 
 	ranges := strings.Split(string(input), ",")
 
-	count := puzzle1(ranges)
-	fmt.Println("Puzzle 1: ", count)
+	answer1 := puzzle1(ranges)
+	fmt.Println("Puzzle 1: ", answer1)
 
-	count = puzzle2(ranges)
-	fmt.Println("Puzzle 2: ", count)
+	answer2 := puzzle2(ranges)
+	fmt.Println("Puzzle 2: ", answer2)
 }
 
 func puzzle1(rangesStr []string) int {
