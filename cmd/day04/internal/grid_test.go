@@ -39,7 +39,8 @@ func TestGrid_Neighbors(t *testing.T) {
 ..........
 ..........`)
 
-	neighbors := grid.Neighbors(1, 1)
+	neighbors := slices.Collect(grid.Neighbors(1, 1))
+
 	if len(neighbors) != 8 {
 		t.Errorf("Expected 8 neighbors, got %d", len(neighbors))
 	}

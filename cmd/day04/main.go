@@ -37,7 +37,7 @@ func puzzle1(gridStr string) int {
 			// count the number of neighbors with rolls
 			neighborCount := 0
 			neighbors := grid.Neighbors(x, y)
-			for _, neighbor := range neighbors {
+			for neighbor := range neighbors {
 				if grid.HasRoll(neighbor.X, neighbor.Y) {
 					neighborCount++
 				}
@@ -73,7 +73,7 @@ func puzzle2(gridStr string) int {
 				// count the number of neighbors with rolls
 				neighborCount := 0
 				neighbors := grid.Neighbors(x, y)
-				for _, neighbor := range neighbors {
+				for neighbor := range neighbors {
 					if grid.HasRoll(neighbor.X, neighbor.Y) {
 						neighborCount++
 					}

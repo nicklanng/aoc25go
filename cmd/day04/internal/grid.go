@@ -1,6 +1,9 @@
 package internal
 
-import "strings"
+import (
+	"iter"
+	"strings"
+)
 
 type Point struct {
 	X int
@@ -16,15 +19,18 @@ type Grid struct {
 
 func NewGrid(gridStr string) Grid {
 	lines := strings.Split(gridStr, "\n")
-	maxY := len(lines)
-	maxX := len(lines[0])
-	data := make([]bool, maxY*maxX)
+
+	height := len(lines)
+	width := len(lines[0])
+
+	data := make([]bool, height*width)
 	for y, line := range lines {
 		for x, char := range line {
-			data[y*maxX+x] = char == '@'
+			data[y*width+x] = char == '@'
 		}
 	}
-	return Grid{data: data, Width: maxX, Height: maxY}
+
+	return Grid{data: data, Width: width, Height: height}
 }
 
 func (g Grid) HasRoll(x, y int) bool {
@@ -41,15 +47,17 @@ func (g Grid) ClearRoll(x, y int) {
 	g.data[y*g.Width+x] = false
 }
 
-func (g Grid) Neighbors(x, y int) []Point {
-	neighbors := make([]Point, 0, 8)
-	for _, dx := range []int{-1, 0, 1} {
-		for _, dy := range []int{-1, 0, 1} {
-			if dx == 0 && dy == 0 {
-				continue
+func (g Grid) Neighbors(x, y int) iter.Seq[Point] {
+	return func(yield func(Point) bool) {
+		for dx := -1; dx <= 1; dx++ {
+			for dy := -1; dy <= 1; dy++ {
+				if dx == 0 && dy == 0 {
+					continue
+				}
+				if !yield(Point{X: x + dx, Y: y + dy}) {
+					return
+				}
 			}
-			neighbors = append(neighbors, Point{X: x + dx, Y: y + dy})
 		}
 	}
-	return neighbors
 }
