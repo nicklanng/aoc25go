@@ -84,6 +84,9 @@ func findHighestJoltage(selection string) (int, int, error) {
 			highest = v
 			highestIndex = i
 		}
+		if highest == '9' {
+			break
+		}
 	}
 
 	// convert the highest joltage to an integer
