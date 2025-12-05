@@ -53,9 +53,8 @@ func compactRanges(ranges []data.Range) []data.Range {
 	var compactedRanges = []data.Range{ranges[0]}
 
 	for i := 1; i < len(ranges); i++ {
-		r := compactedRanges[len(compactedRanges)-1]
-		if r.Overlaps(ranges[i]) {
-			r.Max = max(r.Max, ranges[i].Max)
+		if compactedRanges[len(compactedRanges)-1].Overlaps(ranges[i]) {
+			compactedRanges[len(compactedRanges)-1].Max = max(compactedRanges[len(compactedRanges)-1].Max, ranges[i].Max)
 		} else {
 			compactedRanges = append(compactedRanges, ranges[i])
 		}

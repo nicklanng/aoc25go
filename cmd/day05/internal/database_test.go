@@ -10,17 +10,16 @@ import (
 func TestParseDatabase(t *testing.T) {
 	input := `3-5
 10-14
-11-12
 16-20
-16-21
 12-18
 
 1
 5
-11
 8
+11
 17
-32`
+32
+`
 
 	database, err := ParseDatabase(input)
 	if err != nil {
@@ -60,5 +59,8 @@ func TestCountAvailableIds(t *testing.T) {
 		},
 	}
 
-	assert.Equal(t, 18, database.CountAvailableIds())
+	// Range 3-5: 3, 4, 5 = 3 IDs
+	// Range 10-20: 10 through 20 = 11 IDs
+	// Total: 3 + 11 = 14
+	assert.Equal(t, 14, database.CountAvailableIds())
 }
