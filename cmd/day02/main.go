@@ -4,14 +4,10 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strconv"
 	"strings"
-)
 
-type Range struct {
-	Min int
-	Max int
-}
+	"github.com/nicklanng/aoc25go/internal/data"
+)
 
 func main() {
 	input, err := os.ReadFile("input/day2")
@@ -31,9 +27,13 @@ func main() {
 func puzzle1(rangesStr []string) int {
 	sum := 0
 
-	ranges := make([]Range, len(rangesStr))
+	ranges := make([]data.Range, len(rangesStr))
 	for i, r := range rangesStr {
-		ranges[i] = parseRange(r)
+		var err error
+		ranges[i], err = data.ParseRange(r)
+		if err != nil {
+			panic(err)
+		}
 	}
 	for _, r := range ranges {
 		for i := r.Min; i <= r.Max; i++ {
@@ -49,9 +49,13 @@ func puzzle1(rangesStr []string) int {
 func puzzle2(rangesStr []string) int {
 	sum := 0
 
-	ranges := make([]Range, len(rangesStr))
+	ranges := make([]data.Range, len(rangesStr))
 	for i, r := range rangesStr {
-		ranges[i] = parseRange(r)
+		var err error
+		ranges[i], err = data.ParseRange(r)
+		if err != nil {
+			panic(err)
+		}
 	}
 	for _, r := range ranges {
 		for i := r.Min; i <= r.Max; i++ {
@@ -62,20 +66,6 @@ func puzzle2(rangesStr []string) int {
 	}
 
 	return sum
-}
-
-// parseRange parses a range string into a Range struct
-func parseRange(r string) Range {
-	parts := strings.Split(r, "-")
-	min, _ := strconv.Atoi(parts[0])
-	max, _ := strconv.Atoi(parts[1])
-
-	// defensive, not sure if needed
-	if min > max {
-		return Range{Min: max, Max: min}
-	}
-
-	return Range{Min: min, Max: max}
 }
 
 // isSequenceRepeatedOnce checks if a number is a repeated sequence once

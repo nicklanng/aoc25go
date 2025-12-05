@@ -5,22 +5,6 @@ import (
 	"testing"
 )
 
-func TestParseRange(t *testing.T) {
-	tests := []struct {
-		input    string
-		expected Range
-	}{
-		{"1-10", Range{1, 10}},
-		{"234-345", Range{234, 345}},
-	}
-
-	for _, test := range tests {
-		if parseRange(test.input) != test.expected {
-			t.Errorf("Expected %v, got %v", test.expected, parseRange(test.input))
-		}
-	}
-}
-
 func TestIsSequenceRepeatedOnce(t *testing.T) {
 	tests := []struct {
 		input    int
