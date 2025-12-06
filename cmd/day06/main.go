@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"log"
 	"os"
@@ -11,11 +12,6 @@ import (
 
 type Operator int
 
-const (
-	OpAdd Operator = iota
-	OpMul
-)
-
 func main() {
 	maths, err := os.ReadFile("input/day6")
 	if err != nil {
@@ -25,7 +21,7 @@ func main() {
 	answer1 := puzzle1(string(maths))
 	fmt.Println("Puzzle 1: ", answer1)
 
-	answer2 := puzzle2(string(maths))
+	answer2 := puzzle2(maths)
 	fmt.Println("Puzzle 2: ", answer2)
 }
 
@@ -39,18 +35,18 @@ func puzzle1(maths string) int {
 	operators := strings.Fields(operatorLine)
 
 	// find the operators for each column and init their result space
-	operatorVals := make([]Operator, len(operators))
+	operatorVals := make([]byte, len(operators))
 	results := make([]int, len(operators))
 
 	// parse the operators
 	for i, operator := range operators {
-		switch operator {
+		switch v := operator; v {
 		case "+":
-			operatorVals[i] = OpAdd
-			results[i] = int(OpAdd)
+			operatorVals[i] = v[0]
+			results[i] = 0
 		case "*":
-			operatorVals[i] = OpMul
-			results[i] = int(OpMul)
+			operatorVals[i] = v[0]
+			results[i] = 1
 		}
 	}
 
@@ -61,80 +57,95 @@ func puzzle1(maths string) int {
 
 		for j, value := range values {
 			valueInt, _ := strconv.Atoi(value)
-			switch operatorVals[j] {
-			case OpAdd:
-				results[j] += valueInt
-			case OpMul:
-				results[j] *= valueInt
-			}
+			operation := opToFunc(operatorVals[j])
+			results[j] = operation(results[j], valueInt)
 		}
 	}
 
-	answer := 0
+	var answer int
 	for _, result := range results {
 		answer += result
 	}
 	return answer
 }
 
-func puzzle2(maths string) int {
-	lines := strings.Split(maths, "\n")
-	numberLineCount := len(lines) - 1
+func puzzle2(maths []byte) int {
+	// split the maths into lines and transpose them
+	lines := bytes.Split(maths, []byte("\n"))
+	transposed := transpose(lines)
 
-	var operators []Operator
-	var operatorIndices []int
-	var results []int
+	// result for each block
+	results := make([]int, 1)
 
-	// parse the operators and their indices from the last line
-	for i, char := range lines[len(lines)-1] {
-		switch char {
-		case '+':
-			operators = append(operators, OpAdd)
-			operatorIndices = append(operatorIndices, i)
-			results = append(results, int(OpAdd))
-		case '*':
-			operators = append(operators, OpMul)
-			operatorIndices = append(operatorIndices, i)
-			results = append(results, int(OpMul))
-		}
-	}
+	// per block vars
+	var (
+		block     int
+		firstLine bool = true
+		operation func(a, b int) int
+	)
 
-	// add the end of the line to the operator indicies
-	operatorIndices = append(operatorIndices, len(lines[len(lines)-1])+1)
+	// process each line
+	for _, line := range transposed {
+		lineStr := string(line)
 
-	// process each block of maths
-	for block := 0; block < len(operatorIndices)-1; block++ {
-		// get the start and end indices of the current block
-		operatorIndex := operatorIndices[block]
-		operatorIndexEnd := operatorIndices[block+1] - 1
-
-		// determine the operation for this block
-		var operation func(a, b int) int
-		switch operators[block] {
-		case OpAdd:
-			operation = func(a, b int) int { return a + b }
-		case OpMul:
-			operation = func(a, b int) int { return a * b }
+		// if the line is empty, start a new block
+		if strings.TrimSpace(lineStr) == "" {
+			block++
+			results = append(results, 0)
+			firstLine = true
+			continue
 		}
 
-		// process the numbers in this block
-		for col := operatorIndex; col < operatorIndexEnd; col++ {
-
-			// get the numbers in this column
-			numberStr := ""
-			for row := range numberLineCount {
-				numberStr += string(lines[row][col])
+		// if this is the first line of a block, determine the operation and init the result
+		if firstLine {
+			operator := lineStr[len(lineStr)-1]
+			operation = opToFunc(operator)
+			if operator == '*' {
+				results[block] = 1
 			}
-
-			// convert the number string to an integer and apply the operation
-			number, _ := strconv.Atoi(strings.TrimSpace(numberStr))
-			results[block] = operation(results[block], number)
+			firstLine = false
 		}
+
+		// get the number from the line and apply the operation
+		numberStr := strings.TrimSpace(lineStr[:len(lineStr)-1])
+		number, _ := strconv.Atoi(numberStr)
+		results[block] = operation(results[block], number)
 	}
 
-	answer := 0
+	// sum the results
+	var answer int
 	for _, result := range results {
 		answer += result
 	}
 	return answer
+}
+
+func transpose[T any](slice [][]T) [][]T {
+	xl := len(slice[0])
+	yl := len(slice)
+
+	// init slices
+	result := make([][]T, xl)
+	for i := range result {
+		result[i] = make([]T, yl)
+	}
+
+	// transpose the slice
+	for i := range xl {
+		for j := range yl {
+			result[i][j] = slice[j][i]
+		}
+	}
+
+	return result
+}
+
+func opToFunc(op byte) func(a, b int) int {
+	switch op {
+	case '+':
+		return func(a, b int) int { return a + b }
+	case '*':
+		return func(a, b int) int { return a * b }
+	}
+	return func(a, b int) int { return 0 }
 }

@@ -20,6 +20,6 @@ func TestPuzzle2(t *testing.T) {
  45 64  387 23 
   6 98  215 314
 *   +   *   +  `
-	answer := puzzle2(input)
+	answer := puzzle2([]byte(input))
 	assert.Equal(t, 3263827, answer)
 }
