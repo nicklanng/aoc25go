@@ -65,19 +65,6 @@ func puzzle1(maths []byte) int {
 func puzzle2(maths []byte) int {
 	levels := bytes.Split(maths, []byte("\n"))
 
-	// remove all lines that are just dots
-	filteredLevels := make([][]byte, 0, len(levels))
-	for _, level := range levels {
-		for _, char := range level {
-			if char == '.' {
-				continue
-			}
-			filteredLevels = append(filteredLevels, level)
-			break
-		}
-	}
-	levels = filteredLevels
-
 	// init beams array
 	beams := make([]int, len(levels[0]))
 	nextGenBeams := make([]int, len(levels[0]))
