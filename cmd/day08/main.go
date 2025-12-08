@@ -135,7 +135,7 @@ func findCircuitSizes(points []point, dsu *internal.DisjointSetUnion) []int {
 		circuitSizes[root] = dsu.Size(root)
 	}
 
-	// turn the map into a slice and sort by size
+	// turn the map into a slice
 	sizes := make([]int, 0, len(circuitSizes))
 	for _, size := range circuitSizes {
 		sizes = append(sizes, size)
