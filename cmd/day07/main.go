@@ -80,7 +80,7 @@ func puzzle2(maths []byte) int {
 	// process each level
 	for i := 1; i < len(levels); i++ {
 		level := levels[i]
-		for j := 0; j < len(level); j++ {
+		for j := range level {
 			// if we've hit a splitter, add superpositioned beams to the left and right
 			if level[j] == '^' {
 				nextGenBeams[j-1] += beams[j]
