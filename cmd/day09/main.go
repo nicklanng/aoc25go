@@ -110,24 +110,8 @@ func isValidRectangle(rectangle internal.Rectangle, lines []internal.Line) bool 
 	rectangleLines[2] = internal.Line{Start: internal.Point{X: rectangle.MaxX, Y: rectangle.MaxY}, End: internal.Point{X: rectangle.MinX, Y: rectangle.MaxY}}
 	rectangleLines[3] = internal.Line{Start: internal.Point{X: rectangle.MinX, Y: rectangle.MaxY}, End: internal.Point{X: rectangle.MinX, Y: rectangle.MinY}}
 
-	rayCast := internal.Line{Start: internal.Point{X: 0, Y: rectangle.MinY}, End: internal.Point{X: rectangle.MinX, Y: rectangle.MinY}}
-	var crossingCount int
-	for _, line := range lines {
-		if line.Horizontal() {
-			continue
-		}
-		if rayCast.Crosses(line) {
-			crossingCount++
-		}
-	}
-	// min point is outside tiles
-	if crossingCount%2 == 0 {
-		return false
-	}
-
 	// check if the rectangle is completely contained within the lines
 	for _, line := range rectangleLines {
-		crossingCount = 0
 		for _, line2 := range lines {
 			if line.Crosses(line2) {
 				return false
