@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"log"
+	"math/bits"
 	"os"
 	"strconv"
 	"strings"
@@ -13,21 +14,6 @@ type Machine struct {
 	Lights   uint16
 	Buttons  []uint16
 	Joltages [16]uint8
-}
-
-type history struct {
-	lights   uint16
-	length   int
-	joltages [16]uint8
-}
-
-func (h history) push(button uint16) history {
-	for i := range 16 {
-		if button&(1<<i) != 0 {
-			h.joltages[i]++
-		}
-	}
-	return history{lights: h.lights ^ button, length: h.length + 1, joltages: h.joltages}
 }
 
 func main() {
@@ -59,58 +45,31 @@ func puzzle1(input []byte) int {
 }
 
 func findShortestPathToLights(machine Machine) int {
-	openList := make([]history, 1)
-	visited := map[uint16]struct{}{0: {}}
+	len := len(machine.Buttons)
 
-	for {
-		if len(openList) == 0 {
-			break
+	var buttonPresses int = 1<<len - 1
+
+	for i := 1; i < 1<<len; i++ {
+		var candidate uint16
+
+		for j := range len {
+			if i&(1<<j) != 0 {
+				candidate ^= machine.Buttons[j]
+			}
 		}
 
-		// take the first state from the open list
-		state := openList[0]
-		openList = openList[1:]
-
-		for _, button := range machine.Buttons {
-			// push the button
-			newState := state.push(button)
-
-			// if we've reached the target lights
-			if newState.lights == machine.Lights {
-				return newState.length
+		if candidate == machine.Lights {
+			bitCount := bits.OnesCount(uint(i))
+			if bitCount < buttonPresses {
+				buttonPresses = bitCount
 			}
-
-			// if we're cycling, skip
-			if _, ok := visited[newState.lights]; ok {
-				continue
-			}
-
-			// add the new state to the visited set
-			visited[newState.lights] = struct{}{}
-
-			// add the new state to the open list
-			openList = append(openList, newState)
 		}
 	}
-	return 0
+
+	return buttonPresses
 }
 
 func puzzle2(input []byte) int {
-	machines := parseInput(input)
-	shortestPaths := make([]int, len(machines))
-
-	for i, machine := range machines {
-		shortestPaths[i] = findShortestPathToJoltages(machine)
-	}
-
-	var answer int
-	for _, path := range shortestPaths {
-		answer += path
-	}
-	return answer
-}
-
-func findShortestPathToJoltages(machine Machine) int {
 	return 0
 }
 
