@@ -34,7 +34,28 @@ func puzzle1(input []byte) int {
 	shortestPaths := make([]int, len(machines))
 
 	for i, machine := range machines {
-		shortestPaths[i] = findShortestPathToLights(machine)
+		len := len(machine.Buttons)
+
+		var buttonPresses int = 1<<len - 1
+
+		for i := 1; i < 1<<len; i++ {
+			var candidate uint16
+
+			for j := range len {
+				if i&(1<<j) != 0 {
+					candidate ^= machine.Buttons[j]
+				}
+			}
+
+			if candidate == machine.Lights {
+				bitCount := bits.OnesCount(uint(i))
+				if bitCount < buttonPresses {
+					buttonPresses = bitCount
+				}
+			}
+		}
+
+		shortestPaths[i] = buttonPresses
 	}
 
 	var answer int
@@ -42,31 +63,6 @@ func puzzle1(input []byte) int {
 		answer += path
 	}
 	return answer
-}
-
-func findShortestPathToLights(machine Machine) int {
-	len := len(machine.Buttons)
-
-	var buttonPresses int = 1<<len - 1
-
-	for i := 1; i < 1<<len; i++ {
-		var candidate uint16
-
-		for j := range len {
-			if i&(1<<j) != 0 {
-				candidate ^= machine.Buttons[j]
-			}
-		}
-
-		if candidate == machine.Lights {
-			bitCount := bits.OnesCount(uint(i))
-			if bitCount < buttonPresses {
-				buttonPresses = bitCount
-			}
-		}
-	}
-
-	return buttonPresses
 }
 
 func puzzle2(input []byte) int {
